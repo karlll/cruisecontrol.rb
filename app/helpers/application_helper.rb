@@ -22,17 +22,17 @@ module ApplicationHelper
   def format_time(time, format = :iso)
     I18n.l time, :format => format
   end
-  
+
   def format_seconds(total_seconds, format = :general)
     DurationFormatter.new(total_seconds).send(format)
   end
-  
+
   def setting_row(label, value, help = '&nbsp;')
     <<-EOL
     <tr>
-      <td class='label'>#{label} :</td>
-      <td>#{value}</td>
-      <td class='help'>#{help}</td>
+    <td class='label'>#{label} :</td>
+    <td>#{value}</td>
+    <td class='help'>#{help}</td>
     </tr>
     EOL
   end
@@ -59,11 +59,11 @@ module ApplicationHelper
     end
     return text.html_safe
   end
-  
+
   def link_to_build_with_elapsed_time(project, build)
     build_link(build_to_text(build), project, build)
   end
-    
+
   def display_builder_state(state)
     case state
     when 'building', 'builder_down', 'build_requested', 'source_control_error', 'queued', 'timed_out', 'error'
@@ -76,9 +76,13 @@ module ApplicationHelper
   end
 
   def format_changeset_log(log)
-    h(log.strip)
+    if log.nil?
+      h("<empty>")
+    else
+      h(log.strip)
+    end
   end
-  
+
   def elapsed_time(build, format = :general)
     begin
       content_tag :span, format_seconds(build.elapsed_time, format)
@@ -86,12 +90,12 @@ module ApplicationHelper
       '' # The build time is not present.
     end
   end
-  
+
   def build_link(text, project, build)
     link_to text, build_path(:project => project.name, :build => build.label),
-            :class => build.status, :title => format_changeset_log(build.changeset)
+      :class => build.status, :title => format_changeset_log(build.changeset)
   end
-  
+
   def url_path(url)
     if url.is_a?(Hash)
       url_for(url.merge(:only_path => true))
@@ -103,9 +107,9 @@ module ApplicationHelper
   def button_tag(label, attrs={})
     content_tag :button, label, attrs
   end
-        
+
   private
-  
+
   def build_label(build)
     "#{build.abbreviated_label} (#{human_time(build.time)})"
   end

@@ -3,7 +3,7 @@
     <div class="name"><%= link_to project.name, project_path(project), :id => project.name %></div>
     <div class="builder_control">
 
-      <%=  link_to_if(Configuration.display_latest_cucumber_results,"Latest Cucumber results", "#{latest_build_path(:project => project)}/artifacts/features/") %>
+
       <%= render :partial => "builds/build_buttons", :locals => { :project => project } %>
     </div>
   </div>
@@ -17,6 +17,9 @@
     
     <div class="project_status <%= status %>">
       <%= status.titleize %>
+      <% if Configuration.display_latest_cucumber_results %>
+      &nbsp;|&nbsp; <%= link_to "Latest Cucumber results", "#{latest_build_path(:project => project)}/artifacts/features/" %>
+      <% end %>
     </div>
 
     <div class="status <%= project.last_complete_build_status %>">

@@ -136,6 +136,67 @@ class BuildsControllerTest < ActionController::TestCase
     end
   end
 
+  context "GET /builds/:project/latest" do
+    test "should redirect to the latest build" do
+      with_sandbox_project do |sandbox, project|
+        create_builds 1, 2
+
+        Project.expects(:find).with(project.name).times(2).returns(project)
+
+        get :latest, :project => project.name
+
+        assert_response :redirect
+        assert_redirected_to build_path(assigns(:project), :build => 2)
+
+
+        create_build 3, :failed
+
+        get :latest, :project => project.name
+
+        assert_response :redirect
+        assert_redirected_to build_path(assigns(:project), :build => 3)
+      end
+    end
+
+    test "should render a 404 and an error page if there are no builds" do
+      with_sandbox_project do |sandbox, project|
+
+        Project.expects(:find).with(project.name).times(1).returns(project)
+
+        get :latest , :project => project.name
+
+        assert_response 404
+        assert_equal 'No build found', @response.body
+
+
+      end
+    end
+  end
+
+  context "GET /builds/:project/latest/*path" do
+    test "should redirect to the latest build with the same path" do
+      with_sandbox_project do |sandbox, project|
+        create_builds 1, 2
+
+        Project.expects(:find).with(project.name).times(2).returns(project)
+
+        get :latest, :project => project.name, :path => "the/path"
+
+        assert_response :redirect
+        assert_redirected_to build_path(assigns(:project), :build => 2) + "/the/path"
+
+
+        create_build 3, :failed
+
+        get :latest, :project => project.name, :path => "the/path"
+
+        assert_response :redirect
+        assert_redirected_to build_path(assigns(:project), :build => 3) + "/the/path"
+      end
+    end
+
+  end
+
   context "GET /builds/:project/:id" do
     test "should render the show template with the requested project and build" do
       with_sandbox_project do |sandbox, project|

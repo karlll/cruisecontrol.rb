@@ -11,13 +11,15 @@ class Configuration
   @git_load_new_changesets_timeout = 5.minutes
   @build_history_limit = 30
   @max_file_display_length = 100.kilobytes
+  @display_latest_cucumber_results = true
 
   class << self
     # published configuration options (mentioned in config/site_config.rb.example)
     attr_accessor :default_polling_interval, :disable_admin_ui, :email_from,
                   :dashboard_refresh_interval, :serialize_builds,
                   :serialized_build_timeout, :git_load_new_changesets_timeout,
-                  :disable_code_browsing, :build_history_limit, :max_file_display_length
+                  :disable_code_browsing, :build_history_limit, :max_file_display_length,
+                  :display_latest_cucumber_results
     attr_reader :dashboard_url
 
     # non-published configuration options (obscure stuff, mostly useful for http://cruisecontrolrb.thoughtworks.com)

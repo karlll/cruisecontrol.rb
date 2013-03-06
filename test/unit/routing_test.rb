@@ -62,7 +62,15 @@ class RoutingTest < ActionController::TestCase
         :action => 'latest_successful',
         :project => 'CruiseControl'
     end
-  
+
+    test "should match latest build correctly" do
+      assert_routing '/builds/CruiseControl/latest',
+                     :controller => 'builds',
+                     :action => 'latest',
+                     :project => 'CruiseControl'
+    end
+
+
     test "should match artifacts correctly" do
       assert_routing '/builds/CruiseControl/1.2/artifacts/this/stuff.rb', 
         :controller => 'builds', 

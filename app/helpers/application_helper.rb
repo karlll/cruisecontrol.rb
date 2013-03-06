@@ -96,6 +96,13 @@ module ApplicationHelper
       :class => build.status, :title => format_changeset_log(build.changeset)
   end
 
+  def latest_build_link(text, project)
+    link_to text, latest_build_path(:project => project.name)
+  end
+
+
+
+
   def url_path(url)
     if url.is_a?(Hash)
       url_for(url.merge(:only_path => true))

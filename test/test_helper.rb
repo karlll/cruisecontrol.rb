@@ -9,6 +9,8 @@ require 'stringio'
 ActionMailer::Base.delivery_method = :test
 ActionMailer::Base.perform_deliveries = true
 
+Configuration.use_basic_auth = false
+
 class ActiveSupport::TestCase
   class << self
     def context(name, &block)

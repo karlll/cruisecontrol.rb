@@ -4,7 +4,19 @@
 class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
   protect_from_forgery # See ActionController::RequestForgeryProtection for details
-  
+
+  before_filter :authentication_check
+
+
+  def authentication_check
+    if Configuration.use_basic_auth
+      authenticate_or_request_with_http_basic do |user, password|
+        user == Configuration.auth_user && password == Configuration.auth_password
+      end
+    end
+
+  end
+
   def render_not_found
     render :file => Rails.root.join('public', '404.html').to_s, :status => 404
   end
